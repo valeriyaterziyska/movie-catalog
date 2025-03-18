@@ -1,0 +1,19 @@
+{
+  "name": "movie-catalog",
+  "version": "1.0.0",
+  "description": "MPA with Express.js, Node.js, MongoDB and Handlebars",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "express-handlebars": "^8.0.1"
+  }
+}
