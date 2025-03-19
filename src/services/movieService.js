@@ -1,4 +1,6 @@
-const movies = [{
+const movies = [
+  {
+    _id: 1,
     title: "Jungle cruise",
     genre: "Adventure",
     director: "Spilberg",
@@ -11,10 +13,12 @@ const movies = [{
 ];
 
 exports.create = (movieData) => {
+  movieData._id = movies[movies.length - 1]._id + 1;
+
   console.log(movieData);
   movies.push(movieData);
 };
 
 exports.getAll = () => {
   return [...movies];
-}
+};
