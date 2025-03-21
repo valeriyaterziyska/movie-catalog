@@ -14,7 +14,7 @@ configExpress(app);
 app.use(routes);
 
 mongoose
-  .connect(`mongodb://localhost:27017/movies`)
+  .connect(`mongodb://localhost:27017/mogic-movies`)
   .then(() => {
     console.log(`DB Connected`);
 

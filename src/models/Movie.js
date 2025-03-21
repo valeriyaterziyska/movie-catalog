@@ -26,12 +26,17 @@ const movieSchema = new mongoose.Schema({
     max: 5,
   },
   description: {
-    type: Number,
+    type: String,
     required: true,
     maxLength: 1000,
   },
   imageUrl: {
     type: String,
     required: true,
+    match: /^https?/,
   },
 });
+
+const Movie = mongoose.model("Movie", movieSchema);
+
+module.exports = Movie;
