@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const movieService = require("../services/movieService");
-const castService = require('../services/castService');
+const castService = require("../services/castService");
 
 router.get("/create", (req, res) => {
   res.render("create");
@@ -38,6 +38,15 @@ router.get("/movies/:movieId/attach", async (req, res) => {
 
   //TODO: remove already added casts
   res.render("movie/attach", { ...movie, casts });
+});
+
+router.post("/movies/:movieId/attach", async (req, res) => {
+  const castId = req.body.cast;
+  const movieId = req.params.movieId;
+
+  await movieService.attach(movieId, castId);
+
+  res.redirect(`/movies/${movieId}/attach`);
 });
 
 module.exports = router;
