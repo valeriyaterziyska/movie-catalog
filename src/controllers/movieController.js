@@ -3,11 +3,13 @@ const router = require("express").Router();
 const movieService = require("../services/movieService");
 const castService = require("../services/castService");
 
-router.get("/create", (req, res) => {
+const { isAuth } = require("../middlewares/authMiddleware");
+
+router.get("/create", isAuth, (req, res) => {
     res.render("create");
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", isAuth, async (req, res) => {
     const newMovie = req.body;
 
     try {
@@ -32,7 +34,7 @@ router.get("/movies/:movieId", async (req, res) => {
     res.render("details", { movie });
 });
 
-router.get("/movies/:movieId/attach", async (req, res) => {
+router.get("/movies/:movieId/attach", isAuth, async (req, res) => {
     const movie = await movieService.getOne(req.params.movieId).lean();
     const casts = await castService.getAll().lean();
 
@@ -42,7 +44,7 @@ router.get("/movies/:movieId/attach", async (req, res) => {
     res.render("movie/attach", { ...movie, casts });
 });
 
-router.post("/movies/:movieId/attach", async (req, res) => {
+router.post("/movies/:movieId/attach", isAuth, async (req, res) => {
     const castId = req.body.cast;
     const movieId = req.params.movieId;
 
@@ -51,10 +53,11 @@ router.post("/movies/:movieId/attach", async (req, res) => {
     res.redirect(`/`);
 });
 
-router.get("/movies/:movieId/edit", async (req, res) => {
+router.get("/movies/:movieId/edit", isAuth, async (req, res) => {
     const movieId = req.params.movieId;
+
     const movie = await movieService.getOne(movieId).lean();
-    
+
     res.render("movie/edit", { movie });
 });
 
