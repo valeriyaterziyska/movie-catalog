@@ -4,55 +4,58 @@ const movieService = require("../services/movieService");
 const castService = require("../services/castService");
 
 router.get("/create", (req, res) => {
-  res.render("create");
+    res.render("create");
 });
 
 router.post("/create", async (req, res) => {
-  const newMovie = req.body;
+    const newMovie = req.body;
 
-  try {
-    await movieService.create(newMovie);
+    try {
+        await movieService.create(newMovie);
 
-    res.redirect("/");
-  } catch (err) {
-    console.log(err.message);
+        res.redirect("/");
+    } catch (err) {
+        console.log(err.message);
 
-    res.redirect("/create");
-  }
+        res.redirect("/create");
+    }
 });
 
 router.get("/movies/:movieId", async (req, res) => {
-  const movieId = req.params.movieId;
-  const movie = await movieService.getOne(movieId).lean();
+    const movieId = req.params.movieId;
+    const movie = await movieService.getOne(movieId).lean();
 
-  //TODO: Use Handlebars helpers
-  movie.rating = new Array(Number(movie.rating)).fill(true);
-  // movie.ratingStars = '&#x2605;'.repeat(movie.rating);
+    //TODO: Use Handlebars helpers
+    movie.rating = new Array(Number(movie.rating)).fill(true);
+    // movie.ratingStars = '&#x2605;'.repeat(movie.rating);
 
-  res.render("details", { movie });
+    res.render("details", { movie });
 });
 
 router.get("/movies/:movieId/attach", async (req, res) => {
-  const movie = await movieService.getOne(req.params.movieId).lean();
-  const casts = await castService.getAll().lean();
+    const movie = await movieService.getOne(req.params.movieId).lean();
+    const casts = await castService.getAll().lean();
 
-  console.log(req.params.movieId);
+    console.log(req.params.movieId);
 
-  //TODO: remove already added casts
-  res.render("movie/attach", { ...movie, casts });
+    //TODO: remove already added casts
+    res.render("movie/attach", { ...movie, casts });
 });
 
 router.post("/movies/:movieId/attach", async (req, res) => {
-  const castId = req.body.cast;
-  const movieId = req.params.movieId;
+    const castId = req.body.cast;
+    const movieId = req.params.movieId;
 
-  await movieService.attach(movieId, castId);
+    await movieService.attach(movieId, castId);
 
-  res.redirect(`/`);
+    res.redirect(`/`);
 });
 
-router.get('/movies/:movieId/edit', (req, res) => {
-  res.render('movie/edit');
-})
+router.get("/movies/:movieId/edit", async (req, res) => {
+    const movieId = req.params.movieId;
+    const movie = await movieService.getOne(movieId).lean();
+    
+    res.render("movie/edit", { movie });
+});
 
 module.exports = router;
