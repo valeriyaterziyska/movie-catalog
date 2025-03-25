@@ -13,7 +13,7 @@ router.post("/create", isAuth, async (req, res) => {
     const newMovie = {
         ...req.body,
         owner: req.user._id,
-    }
+    };
 
     try {
         await movieService.create(newMovie);
@@ -29,7 +29,7 @@ router.post("/create", isAuth, async (req, res) => {
 router.get("/movies/:movieId", async (req, res) => {
     const movieId = req.params.movieId;
     const movie = await movieService.getOne(movieId).lean();
-    const isOwner = movie.owner == req.user?._id;
+    const isOwner = movie.owner && movie.owner == req.user?._id;
 
     //TODO: Use Handlebars helpers
     movie.rating = new Array(Number(movie.rating)).fill(true);
@@ -63,6 +63,21 @@ router.get("/movies/:movieId/edit", isAuth, async (req, res) => {
     const movie = await movieService.getOne(movieId).lean();
 
     res.render("movie/edit", { movie });
+});
+
+router.post("/movies/:movieId/edit", isAuth, async (req, res) => {
+    const movieId = req.params.movieId;
+    const editedMovie = req.body;
+
+    await movieService.edit(movieId, editedMovie);
+
+    res.redirect(`/movies/${movieId}`);
+});
+
+router.get("/movies/:movieId/delete", isAuth, async (req, res) => {
+    await movieService.delete(req.params.movieId);
+
+    res.redirect("/");
 });
 
 module.exports = router;
