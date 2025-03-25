@@ -9,7 +9,7 @@ function configExpress(app) {
             extended: false,
         })
     );
-    app.use(cookieParser);
+    app.use(cookieParser());
 
     return app;
 }
