@@ -9,9 +9,14 @@ router.get("/register", (req, res) => {
 router.post("/register", async (req, res) => {
     const userData = req.body;
 
-    await authService.register(userData);
+    try {
+        await authService.register(userData);
 
-    res.redirect("/auth/login");
+        res.redirect("/auth/login");
+    } catch (err) {
+        res.render("auth/register", { error: err.message });
+    }
+
 });
 
 router.get("/login", (req, res) => {
@@ -24,15 +29,15 @@ router.post("/login", async (req, res) => {
     const token = await authService.login(email, password);
 
     // console.log(token);
-    res.cookie('auth', token);
+    res.cookie("auth", token);
 
-    res.redirect('/');
+    res.redirect("/");
 });
 
-router.get('/logout', (req, res) => {
-    res.clearCookie('auth');
+router.get("/logout", (req, res) => {
+    res.clearCookie("auth");
 
-    res.redirect('/')
-})
+    res.redirect("/");
+});
 
 module.exports = router;

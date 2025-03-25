@@ -4,7 +4,6 @@ const jwt = require("../lib/jwt");
 
 const { SECRET } = require("../config/configAuth");
 
-//TODO: Check if user exists
 exports.register = (userData) => {
     const user = User.findOne({ email: userData.email });
 
